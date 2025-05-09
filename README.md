@@ -4,6 +4,8 @@
 
 This project involves building and demonstrating a React JSX application with a Flask backend. The application will interact with the Zapier Zendesk API to showcase its capabilities.
 
+🟢 **Live Demo**: [Available on EC2](http://50.18.42.197/)
+
 ## Requirements
 
 - **Frontend**: React JSX app
