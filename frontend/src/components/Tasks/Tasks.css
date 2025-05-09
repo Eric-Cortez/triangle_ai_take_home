@@ -67,6 +67,22 @@
   color: #333;
 }
 
+.create-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease;
+  float: right; /* Aligns the button to the right */
+}
+
+.create-button:hover {
+  background-color: #0056b3;
+}
+
 
 @media (max-width: 768px) {
   .tasks-table th,
@@ -89,4 +105,70 @@
   .tasks-table td.subject-column {
     max-width: 100px;
   }
+}
+
+
+/* New Task Form CSS */
+.create-task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.create-task-form h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.create-task-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #555;
+}
+
+.create-task-form input,
+.create-task-form select,
+.create-task-form textarea {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+
+.create-task-form .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.create-task-form .save-button {
+  background-color: #000;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.create-task-form .save-button:hover {
+  background-color: #333;
+}
+
+.create-task-form .cancel-button {
+  background-color: white;
+  color: black;
+  border: 1px solid #ddd;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.create-task-form .cancel-button:hover {
+  background-color: #f1f1f1;
+  color: black;
 }
