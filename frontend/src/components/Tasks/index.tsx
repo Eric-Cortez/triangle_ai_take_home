@@ -17,6 +17,7 @@ const Tasks: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
 
   useEffect(() => {
@@ -49,6 +50,14 @@ const Tasks: React.FC = () => {
     setIsModalOpen(false);
   };
 
+  const openCreateModal = () => {
+    setIsCreateModalOpen(true);
+  };
+
+  const closeCreateModal = () => {
+    setIsCreateModalOpen(false);
+  };
+
   const handleTaskUpdate = (updatedTask: EditableTask) => {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
@@ -60,6 +69,9 @@ const Tasks: React.FC = () => {
   return (
     <div className="tasks-container">
       <h1 className="tasks-title">DemoAI Zendesk Tasks</h1>
+      <button onClick={openCreateModal} className="create-button">
+        Create Ticket
+      </button>
       {error && <p className="tasks-error">Error: {error}</p>}
       <table className="tasks-table">
         <thead>
@@ -120,6 +132,77 @@ const Tasks: React.FC = () => {
             onTaskUpdate={handleTaskUpdate}
           />
         )}
+      </Modal>
+
+      <Modal isOpen={isCreateModalOpen} onClose={closeCreateModal}>
+        <h2>Create New Ticket</h2>
+        <form
+          className="create-task-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target as HTMLFormElement);
+            const newTicket = {
+              subject: formData.get("subject") as string,
+              description: formData.get("description") as string,
+              status: formData.get("status") as string,
+              priority: formData.get("priority") as string,
+            };
+
+            fetch(`${import.meta.env.VITE_URL}/api/tasks`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(newTicket),
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+              })
+              .then((data) => {
+                setTasks((prevTasks) => [...prevTasks, data]);
+                closeCreateModal();
+              })
+              .catch((err) => setError(err.message));
+          }}
+        >
+          <label>
+            Subject:
+            <input type="text" name="subject" required />
+          </label>
+          <label>
+            Description:
+            <textarea name="description" required></textarea>
+          </label>
+          <label>
+            Status:
+            <select name="status" required>
+              <option value="open">Open</option>
+              <option value="in_progress">In Progress</option>
+              <option value="closed">Closed</option>
+            </select>
+          </label>
+          <label>
+            Priority:
+            <select name="priority" required>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </label>
+          <div className="form-actions">
+            <button type="submit" className="save-button">
+              Create
+            </button>
+            <button
+              type="button"
+              onClick={closeCreateModal}
+              className="cancel-button"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
       </Modal>
     </div>
   );
