@@ -25,6 +25,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   overflow: hidden;
+  table-layout: fixed;
 }
 
 .tasks-table th,
@@ -32,6 +33,20 @@
   border: 1px solid #ddd;
   padding: 12px;
   text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.tasks-table th:nth-child(3),
+.tasks-table td:nth-child(3) {
+  width: 40%;
+}
+
+.tasks-table th:not(:nth-child(3)),
+.tasks-table td:not(:nth-child(3)) {
+  width: 10%;
 }
 
 .tasks-table th {
@@ -52,18 +67,26 @@
   color: #333;
 }
 
-.tasks-table tr:first-child th:first-child {
-  border-top-left-radius: 8px;
+
+@media (max-width: 768px) {
+  .tasks-table th,
+  .tasks-table td {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .tasks-table td.subject-column {
+    max-width: 150px;
+  }
 }
 
-.tasks-table tr:first-child th:last-child {
-  border-top-right-radius: 8px;
-}
 
-.tasks-table tr:last-child td:first-child {
-  border-bottom-left-radius: 8px;
-}
+@media (max-width: 480px) {
+  .tasks-table {
+    font-size: 10px;
+  }
 
-.tasks-table tr:last-child td:last-child {
-  border-bottom-right-radius: 8px;
+  .tasks-table td.subject-column {
+    max-width: 100px;
+  }
 }
