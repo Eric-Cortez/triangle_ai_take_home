@@ -207,7 +207,7 @@ const Tasks: React.FC = () => {
                 Status:
                 <select name="status" required>
                   <option value="open">Open</option>
-                  <option value="in_progress">In Progress</option>
+                  <option value="pending">Pending</option>
                   <option value="closed">Closed</option>
                 </select>
               </label>
