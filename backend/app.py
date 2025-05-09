@@ -18,7 +18,7 @@ ZAPIER_WEBHOOK_URL = os.getenv("ZAPIER_WEBHOOK_URL")
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
-def react_root():
+def react_root(path):
     return app.send_static_file('index.html')
 
 
@@ -62,4 +62,4 @@ def zapier_webhook():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
