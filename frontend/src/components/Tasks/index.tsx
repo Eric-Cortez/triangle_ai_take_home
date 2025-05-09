@@ -19,6 +19,7 @@ const Tasks: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_URL}/api/tasks`)
@@ -64,6 +65,55 @@ const Tasks: React.FC = () => {
         task.id === updatedTask.id ? { ...task, ...updatedTask } : task
       )
     );
+  };
+
+  const handleCreateTask = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    const formData = new FormData(e.currentTarget);
+    const newTicket = {
+      subject: formData.get("subject") as string,
+      description: formData.get("description") as string,
+      status: formData.get("status") as string,
+      priority: formData.get("priority") as string,
+    };
+
+    fetch(`${import.meta.env.VITE_URL}/api/tasks`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newTicket),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(() => {
+        setTimeout(() => {
+          // Refetch all tasks after successful creation
+          fetch(`${import.meta.env.VITE_URL}/api/tasks`)
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then((data) => {
+              setTasks(data.requests);
+              setLoading(false);
+              closeCreateModal();
+            })
+            .catch((err) => {
+              setError(err.message);
+              setLoading(false);
+            });
+        }, 3500);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
   };
 
   return (
@@ -137,74 +187,53 @@ const Tasks: React.FC = () => {
       </Modal>
 
       <Modal isOpen={isCreateModalOpen} onClose={closeCreateModal}>
-        <h2>Create New Ticket</h2>
-        <form
-          className="create-task-form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target as HTMLFormElement);
-            const newTicket = {
-              subject: formData.get("subject") as string,
-              description: formData.get("description") as string,
-              status: formData.get("status") as string,
-              priority: formData.get("priority") as string,
-            };
-
-            fetch(`${import.meta.env.VITE_URL}/api/tasks`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(newTicket),
-            })
-              .then((response) => {
-                if (!response.ok) {
-                  throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-              })
-              .then((data) => {
-                setTasks((prevTasks) => [...prevTasks, data]);
-                closeCreateModal();
-              })
-              .catch((err) => setError(err.message));
-          }}
-        >
-          <label>
-            Subject:
-            <input type="text" name="subject" required />
-          </label>
-          <label>
-            Description:
-            <textarea name="description" required></textarea>
-          </label>
-          <label>
-            Status:
-            <select name="status" required>
-              <option value="open">Open</option>
-              <option value="in_progress">In Progress</option>
-              <option value="closed">Closed</option>
-            </select>
-          </label>
-          <label>
-            Priority:
-            <select name="priority" required>
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-            </select>
-          </label>
-          <div className="form-actions">
-            <button type="submit" className="save-button">
-              Create
-            </button>
-            <button
-              type="button"
-              onClick={closeCreateModal}
-              className="cancel-button"
-            >
-              Cancel
-            </button>
+        {loading ? (
+          <div className="loading-message">
+            <p>Creating ticket, please wait...</p>
           </div>
-        </form>
+        ) : (
+          <>
+            <h2>Create New Ticket</h2>
+            <form className="create-task-form" onSubmit={handleCreateTask}>
+              <label>
+                Subject:
+                <input type="text" name="subject" required />
+              </label>
+              <label>
+                Description:
+                <textarea name="description" required></textarea>
+              </label>
+              <label>
+                Status:
+                <select name="status" required>
+                  <option value="open">Open</option>
+                  <option value="in_progress">In Progress</option>
+                  <option value="closed">Closed</option>
+                </select>
+              </label>
+              <label>
+                Priority:
+                <select name="priority" required>
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                </select>
+              </label>
+              <div className="form-actions">
+                <button type="submit" className="save-button">
+                  Create
+                </button>
+                <button
+                  type="button"
+                  onClick={closeCreateModal}
+                  className="cancel-button"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </>
+        )}
       </Modal>
     </div>
   );
