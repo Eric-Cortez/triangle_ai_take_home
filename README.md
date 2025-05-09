@@ -21,4 +21,5 @@ The application should:
 2. Demonstrate editing and posting data to Zendesk using the API.
 3. Provide a simple and intuitive UI with multiple containers to showcase the API's capabilities.
 
-   ![Screen Recording 2025-05-09 at 9 25 57 AM](https://github.com/user-attachments/assets/a52d68dd-4d7a-48fe-aeaf-53e242295c22)
+
+![demoAI](https://github.com/user-attachments/assets/50090693-dcd9-45ed-a07f-37389cbb7262)
