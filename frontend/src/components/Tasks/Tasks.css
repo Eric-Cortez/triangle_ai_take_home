@@ -38,7 +38,6 @@
   white-space: nowrap;
 }
 
-
 .tasks-table th:nth-child(3),
 .tasks-table td:nth-child(3) {
   width: 40%;
@@ -76,13 +75,12 @@
   cursor: pointer;
   margin-bottom: 20px;
   transition: background-color 0.3s ease;
-  float: right; /* Aligns the button to the right */
+  float: right;
 }
 
 .create-button:hover {
   background-color: #0056b3;
 }
-
 
 @media (max-width: 768px) {
   .tasks-table th,
@@ -96,7 +94,6 @@
   }
 }
 
-
 @media (max-width: 480px) {
   .tasks-table {
     font-size: 10px;
@@ -107,8 +104,6 @@
   }
 }
 
-
-/* New Task Form CSS */
 .create-task-form {
   display: flex;
   flex-direction: column;
@@ -171,4 +166,12 @@
 .create-task-form .cancel-button:hover {
   background-color: #f1f1f1;
   color: black;
+}
+
+.tasks-note {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 10px;
+  font-style: italic;
+  text-align: end;
 }

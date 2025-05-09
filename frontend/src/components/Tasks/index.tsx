@@ -95,30 +95,32 @@ const Tasks: React.FC = () => {
               <td>{formatDate(task.created_at)}</td>
               <td>{formatDate(task.updated_at)}</td>
               <td>
-                <button
-                  onClick={() => openModal(task)}
-                  className="edit-button"
-                  aria-label="Edit Task"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    height="18"
-                    width="18"
+                {task.status === "closed" ? null : (
+                  <button
+                    onClick={() => openModal(task)}
+                    className="edit-button"
+                    aria-label="Edit Task"
                   >
-                    <path
-                      fill="#2D2E2E"
-                      d="m16.92 5 3.51 3.52 1.42-1.42-4.93-4.93L3 16.09V21h4.91L19.02 9.9 17.6 8.48 7.09 19H5v-2.09L16.92 5Z"
-                    ></path>
-                  </svg>
-                </button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      height="18"
+                      width="18"
+                    >
+                      <path
+                        fill="#2D2E2E"
+                        d="m16.92 5 3.51 3.52 1.42-1.42-4.93-4.93L3 16.09V21h4.91L19.02 9.9 17.6 8.48 7.09 19H5v-2.09L16.92 5Z"
+                      ></path>
+                    </svg>
+                  </button>
+                )}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
+      <p className="tasks-note">* Closed tasks cannot be edited.</p>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         {currentTask && (
           <EditTaskForm
