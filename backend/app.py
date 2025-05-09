@@ -14,7 +14,8 @@ CORS(app)
 ZENDESK_BASE_URL = os.getenv("ZENDESK_BASE_URL")
 ZENDESK_API_KEY = os.getenv("ZENDESK_API_KEY")
 ZENDESK_EMAIL = os.getenv("ZENDESK_EMAIL")
-ZAPIER_WEBHOOK_URL = os.getenv("ZAPIER_WEBHOOK_URL")
+EDIT_ZAPIER_WEBHOOK_URL = os.getenv("EDIT_ZAPIER_WEBHOOK_URL")
+CREATE_ZAPIER_WEBHOOK_URL = os.getenv("CREATE_ZAPIER_WEBHOOK_URL")
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -45,7 +46,7 @@ def zapier_webhook():
             return jsonify({"error": "Payload is required"}), 400
 
         response = requests.post(
-            ZAPIER_WEBHOOK_URL,
+            EDIT_ZAPIER_WEBHOOK_URL,
             json={
             "ticket_id": payload["ticket_id"],
             "subject": payload["subject"],
@@ -57,6 +58,32 @@ def zapier_webhook():
         response.raise_for_status()
 
         return jsonify({"message": "Payload sent to Zapier successfully", "zapier_response": response.json()}), 200
+    except requests.RequestException as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/api/tasks', methods=['POST'])
+def create_task():
+    try:
+        payload = request.json
+
+        if not payload:
+            return jsonify({"error": "Payload is required"}), 400
+
+
+        response = requests.post(
+            CREATE_ZAPIER_WEBHOOK_URL,
+            json={
+                "subject": payload["subject"],
+                "description": payload["description"],
+                "status": payload["status"],
+                "priority": payload["priority"]
+            },
+            headers={"Content-Type": "application/json"}
+        )
+        response.raise_for_status()
+
+        return jsonify({"message": "Task created successfully", "zapier_response": response.json()}), 201
     except requests.RequestException as e:
         return jsonify({"error": str(e)}), 500
 
