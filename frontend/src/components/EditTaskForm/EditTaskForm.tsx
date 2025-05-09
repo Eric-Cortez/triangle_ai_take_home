@@ -29,18 +29,21 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
     e.preventDefault();
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_URL}/api/zapier-webhook`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ticket_id: formData.id,
-          subject: formData.subject,
-          status: formData.status,
-          priority: formData.priority,
-        }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_URL}/api/tasks/edit`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ticket_id: formData.id,
+            subject: formData.subject,
+            status: formData.status,
+            priority: formData.priority,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to update the ticket");

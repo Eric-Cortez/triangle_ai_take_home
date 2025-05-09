@@ -37,8 +37,8 @@ def fetch_tasks():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route('/api/zapier-webhook', methods=['POST']) # zapier only allows POST requests
-def zapier_webhook():
+@app.route('/api/tasks/edit', methods=['POST']) # zapier only allows POST requests
+def edit_task():
     try:
         payload = request.json
 
