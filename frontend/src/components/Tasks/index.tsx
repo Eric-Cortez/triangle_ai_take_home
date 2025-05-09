@@ -20,7 +20,7 @@ const Tasks: React.FC = () => {
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/api/tasks")
+    fetch(`${import.meta.env.VITE_URL}/api/tasks`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

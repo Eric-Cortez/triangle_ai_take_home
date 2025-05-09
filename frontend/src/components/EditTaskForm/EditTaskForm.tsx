@@ -29,7 +29,7 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
     e.preventDefault();
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/api/zapier-webhook", {
+      const response = await fetch(`${import.meta.env.VITE_URL}/api/zapier-webhook`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,7 +50,7 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
       console.log("Ticket updated successfully:", updatedTask);
 
       onTaskUpdate(formData);
-      onCancel(); 
+      onCancel();
     } catch (error) {
       console.error("Error updating ticket:", error);
     }
