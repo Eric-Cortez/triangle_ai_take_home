@@ -7,13 +7,20 @@ import os
 
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../frontend/dist', static_url_path='/')
+
 CORS(app)
 
 ZENDESK_BASE_URL = os.getenv("ZENDESK_BASE_URL")
 ZENDESK_API_KEY = os.getenv("ZENDESK_API_KEY")
 ZENDESK_EMAIL = os.getenv("ZENDESK_EMAIL")
 ZAPIER_WEBHOOK_URL = os.getenv("ZAPIER_WEBHOOK_URL")
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def react_root():
+    return app.send_static_file('index.html')
+
 
 @app.route('/api/tasks', methods=['GET'])
 def fetch_tasks():
